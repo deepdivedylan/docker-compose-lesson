@@ -7,10 +7,6 @@ services:
         - ./docker-compose-lesson.env
      environment:
         - MYSQL_HOST=mysql
-     volumes:
-       - ./php/public_html:/var/www/html
-       - ./php/php:/var/www/php
-       - ./php/vendor:/var/www/vendor
      ports:
         - 8001:80
   mysql:
