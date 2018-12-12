@@ -20,7 +20,7 @@ try {
 	// grab the mySQL connection
 	$dsn = "mysql:host=" . $_ENV["MYSQL_HOST"] . ";dbname=" . $_ENV["MYSQL_DATABASE"];
 	$options = [PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"];
-	$pdo = new PDO($_ENV["MYSQL_USER"], $_ENV["MYSQL_PASSWORD"], $options);
+	$pdo = new PDO($dsn, $_ENV["MYSQL_USER"], $_ENV["MYSQL_PASSWORD"], $options);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 	//determine which HTTP method was used
