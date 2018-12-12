@@ -65,6 +65,23 @@ class ShoppingList implements \JsonSerializable {
 	}
 
 	/**
+	 * mutator method for shopping list id
+	 *
+	 * @param string|Uuid $newShoppingListId new value of shopping list id
+	 * @throws \RangeException if $newShoppingListId is not positive
+	 * @throws \TypeError if $newShoppingListId is not a uuid or string
+	 */
+	public function setShoppingListId($newShoppingListId): void {
+		try {
+			$uuid = self::validateUuid($newShoppingListId);
+		} catch(\InvalidArgumentException | \RangeException | \Exception | \TypeError $exception) {
+			$exceptionType = get_class($exception);
+			throw(new $exceptionType($exception->getMessage(), 0, $exception));
+		}
+		$this->shoppingListId = $uuid;
+	}
+
+	/**
 	 * accessor method for this shopping list item
 	 *
 	 * @return string value of shopping list item
@@ -74,11 +91,48 @@ class ShoppingList implements \JsonSerializable {
 	}
 
 	/**
+	 * mutator method for shopping list item
+	 *
+	 * @param string $newShoppingListItem new value of shopping list item
+	 * @throws \InvalidArgumentException if $newShoppingListItem is not a string or insecure
+	 * @throws \RangeException if $newShoppingListItem is > 64 characters
+	 * @throws \TypeError if $newShoppingListItem is not a string
+	 */
+	public function setShoppingListItem(string $newShoppingListItem): void {
+		// verify the shopping list item is secure
+		$newShoppingListItem = trim($newShoppingListItem);
+		$newShoppingListItem = filter_var($newShoppingListItem, FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
+		if(empty($newShoppingListItem) === true) {
+			throw(new \InvalidArgumentException("shopping list item is empty or insecure"));
+		}
+
+		// verify the shopping list item will fit in the database
+		if(strlen($newShoppingListItem) > 64) {
+			throw(new \RangeException("shopping list item is too large"));
+		}
+		$this->shoppingListItem = $newShoppingListItem;
+	}
+
+	/**
 	 * accessor method for this shopping list quantity
 	 *
 	 * @return int value of shopping list quantity
 	 **/
 	public function getShoppingListQuantity(): int {
 		return($this->shoppingListQuantity);
+	}
+
+	/**
+	 * mutator method for shopping list quantity
+	 *
+	 * @param int $newShoppingListQuantity new value of shopping list item
+	 * @throws \RangeException if $newShoppingListQuantity is negative
+	 **/
+	public function setShoppingListQuantity(int $newShoppingListQuantity): void {
+		if($newShoppingListQuantity < 0) {
+			throw(new \RangeException("shopping list quantity cannot be negative"));
+		}
+
+		$this->shoppingListQuantity = $newShoppingListQuantity;
 	}
 }
