@@ -1,8 +1,8 @@
 <?php
 
 require_once(dirname(__DIR__) . "/vendor/autoload.php");
-require_once(dirname(__DIR__) . "/classes/autoload.php");
-require_once(dirname(__DIR__) . "./lib/uuid.php");
+require_once(dirname(__DIR__) . "/php/classes/autoload.php");
+require_once(dirname(__DIR__) . "/php/lib/uuid.php");
 
 use Deepdivedylan\DockerComposeLesson\ShoppingList;
 
