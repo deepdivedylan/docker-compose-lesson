@@ -1,2 +1,2 @@
-FROM nginx:apline
-COPY index.html /var/www/html/index.html
+FROM nginx:alpine
+COPY site /usr/share/nginx/html
