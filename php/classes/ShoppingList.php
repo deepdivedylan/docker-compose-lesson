@@ -135,4 +135,51 @@ class ShoppingList implements \JsonSerializable {
 
 		$this->shoppingListQuantity = $newShoppingListQuantity;
 	}
+
+	/**
+	 * inserts this Shopping List into mySQL
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError if $pdo is not a PDO connection object
+	 **/
+	public function insert(\PDO $pdo): void {
+		// create query template
+		$query = "INSERT INTO shoppingList(shoppingListId, shoppingListItem, shoppingListQuantity) VALUES(:shoppingListId, :shoppingListItem, :shoppingListQuantity)";
+		$statement = $pdo->prepare($query);
+
+		// bind the member variables to the place holder in the template
+		$parameters = ["shoppingListId" => $this->shoppingListId->getBytes(), "shoppingListItem" => $this->shoppingListItem, "shoppingListQuantity" => $this->shoppingListQuantity];
+		$statement->execute($parameters);
+	}
+
+	/**
+	 * gets all Shopping Lists
+	 *
+	 * @param \PDO $pdo PDO connection object
+	 * @return \SplFixedArray SplFixedArray of Shopping Lists found or empty array if not found
+	 * @throws \PDOException when mySQL related errors occur
+	 * @throws \TypeError when variables are not the correct data type
+	 **/
+	public static function getAllShoppingLists(\PDO $pdo): \SplFixedArray {
+		// create query template
+		$query = "SELECT shoppingListId, shoppingListItem, shoppingListQuantity FROM shoppingList";
+		$statement = $pdo->prepare($query);
+		$statement->execute();
+
+		// build an array of shopping lists
+		$shoppingLists = new \SplFixedArray($statement->rowCount());
+		$statement->setFetchMode(\PDO::FETCH_ASSOC);
+		while(($row = $statement->fetch()) !== false) {
+			try {
+				$shoppingList = new ShoppingList($row["shoppingListId"], $row["shoppingListItem"], $row["shoppingListQuantity"]);
+				$shoppingLists[$shoppingLists->key()] = $shoppingList;
+				$shoppingLists->next();
+			} catch(\Exception $exception) {
+				// if the row couldn't be converted, rethrow it
+				throw(new \PDOException($exception->getMessage(), 0, $exception));
+			}
+		}
+		return($shoppingLists);
+	}
 }
