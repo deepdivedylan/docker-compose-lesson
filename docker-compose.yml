@@ -3,6 +3,8 @@ version: "3"
 services:
   php:
      build: ./php
+     depends_on:
+       - mysql
      env_file:
         - ./docker-compose-lesson.env
      environment:
