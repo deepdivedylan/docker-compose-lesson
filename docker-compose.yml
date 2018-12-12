@@ -1,7 +1,7 @@
 version: "3"
 
 services:
-  php:
+  backend:
      build: ./php
      depends_on:
        - mysql
@@ -11,6 +11,12 @@ services:
         - MYSQL_HOST=mysql
      ports:
         - 8001:80
+  frontend:
+     build: ./frontend
+     depends_on:
+       - backend
+     ports:
+        - 8002:80
   mysql:
     build: ./mysql
     env_file:
