@@ -3,11 +3,15 @@ version: "3"
 services:
   php:
      build: ./php
+     env_file:
+        - ./docker-compose-lesson.env
      environment:
         - MYSQL_HOST=mysql
      ports:
-        8001:80
+        - 8001:80
   mysql:
     build: ./mysql
+    env_file:
+       - ./docker-compose-lesson.env
     ports:
-       33006:3306
+       - 33006:3306
