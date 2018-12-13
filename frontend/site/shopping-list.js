@@ -1,6 +1,5 @@
-$(document).ready(() => {
+function reloadShoppingList() {
 	fetch("/api").then(reply => reply.json()).then(result => {
-		console.log(result);
 		let output = "";
 		if(result.status !== 200) {
 			output = "<div class=\"alert alert-danger\"><strong>Oh snap!</strong> " + result.message + "</div>";
@@ -17,5 +16,31 @@ $(document).ready(() => {
 			});
 		}
 		$("#outputArea").html(output);
+	});
+}
+
+$(document).ready(() => {
+	reloadShoppingList();
+
+	$("#shoppingListForm").submit(event => {
+		let shoppingList = {shoppingListItem: $("#shoppingListItem").val(), shoppingListQuantity: parseInt($("#shoppingListQuantity").val())};
+		fetch("/api", {
+			method: "POST",
+			body: JSON.stringify(shoppingList),
+			headers: {
+				"Content-type": "application/json"
+			}
+		}).then(reply => reply.json()).then(result => {
+			let output = "";
+			if(result.status !== 200) {
+				output = "<div class=\"alert alert-danger\"><strong>Oh snap!</strong> " + result.message + "</div>";
+			} else {
+				output = "<div class=\"alert alert-success\"><strong>Well done!</strong> " + result.message + "</div>";
+				$("#shoppingListForm").trigger("reset");
+				reloadShoppingList();
+			}
+			$("#messageArea").html(output);
+		});
+		event.preventDefault();
 	});
 });
