@@ -16,6 +16,18 @@
 			<div class="row">
 				<div class="col-md-6">
 					<h2>Add to the List</h2>
+					<form id="shoppingListForm">
+						<div class="form-group row">
+							<label for="shoppingListItem">Shopping List Item</label>
+							<input class="form-control" type="text" name="shoppingListItem" id="shoppingListItem" placeholder="Item to Purchase" />
+						</div>
+						<div class="form-group row">
+							<label for="shoppingListQuantity">Shopping List Quantity</label>
+							<input class="form-control" type="number" min="1" step="1" name="shoppingListQuantity" id="shoppingListQuantity" value="1" />
+						</div>
+						<button class="btn btn-success" type="submit">Add Item</button>
+						<button class="btn btn-warning" type="reset">Clear</button>
+					</form>
 				</div>
 				<div class="col-md-6">
 					<h2>Current List</h2>
